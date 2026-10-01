@@ -119,6 +119,47 @@ As with OSPFv2, user-facing interfaces are configured as passive OSPFv3 interfac
 
 
 
+## Security Design
+
+### Extended ACLs
+
+An extended access control list is used to restrict access from the USERS VLAN to the MANAGEMENT VLAN.
+
+Traffic from VLAN 10 (`192.168.10.0/24`) to VLAN 99 (`192.168.99.0/24`) is denied, while other traffic from the USERS VLAN is permitted.
+
+The ACL is applied inbound on the VLAN 10 subinterfaces of both R2 and R3 so that the security policy remains effective even after an HSRP failover.
+
+### Port Security
+
+Port Security is enabled on user-facing switch ports.
+
+The configuration limits each access port to a single MAC address and uses sticky MAC learning.
+
+Violation mode is set to `restrict`, allowing the port to remain operational while unauthorized frames are dropped and violation counters are incremented.
+
+### DHCP Snooping
+
+DHCP Snooping is enabled for VLANs 10, 20, and 30.
+
+Only trusted uplinks toward the DHCP-serving routers and the inter-switch Port-Channel are configured as trusted interfaces.
+
+User-facing access ports remain untrusted.
+
+DHCP request rate limiting is configured on access ports to reduce the impact of DHCP starvation attacks.
+
+### Security Verification
+
+The following commands are used to verify the security configuration:
+
+```text
+show access-lists
+show port-security
+show port-security address
+show ip dhcp snooping
+show ip dhcp snooping binding
+
+
+
 ## Technologies
 
 - VLANs
