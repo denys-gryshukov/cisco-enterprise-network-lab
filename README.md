@@ -4,6 +4,12 @@ Enterprise network lab built in EVE-NG using Cisco IOL routers and switches.
 
 The project demonstrates Layer 2 and Layer 3 redundancy, dynamic routing, IPv4/IPv6 dual-stack connectivity, network security, and troubleshooting.
 
+
+## Network Topology
+
+![Cisco Enterprise Network Topology](topology/topology.png)
+
+
 ## Technologies
 
 - VLANs
@@ -35,3 +41,5 @@ The project demonstrates Layer 2 and Layer 3 redundancy, dynamic routing, IPv4/I
 Lab implementation completed.
 
 Documentation and verification outputs are being added.
+
+
