@@ -1,0 +1,52 @@
+R1#show ipv6 ospf neighbor 
+
+            OSPFv3 Router with ID (1.1.1.1) (Process ID 10)
+
+Neighbor ID     Pri   State           Dead Time   Interface ID    Interface
+3.3.3.3           1   FULL/DR         00:00:31    2               GigabitEthernet0/2
+2.2.2.2           1   FULL/DR         00:00:35    2               GigabitEthernet0/1
+
+
+
+
+R1#show ipv6 route ospf 
+IPv6 Routing Table - default - 10 entries
+Codes: C - Connected, L - Local, S - Static, U - Per-user Static route
+       B - BGP, HA - Home Agent, MR - Mobile Router, R - RIP
+       H - NHRP, I1 - ISIS L1, I2 - ISIS L2, IA - ISIS interarea
+       IS - ISIS summary, D - EIGRP, EX - EIGRP external, NM - NEMO
+       ND - ND Default, NDp - ND Prefix, DCE - Destination, NDr - Redirect
+       RL - RPL, O - OSPF Intra, OI - OSPF Inter, OE1 - OSPF ext 1
+       OE2 - OSPF ext 2, ON1 - OSPF NSSA ext 1, ON2 - OSPF NSSA ext 2
+       la - LISP alt, lr - LISP site-registrations, ld - LISP dyn-eid
+       lA - LISP away, a - Application
+O   2001:DB8::/64 [110/2]
+     via FE80::5200:FF:FE03:0, GigabitEthernet0/1
+O   2001:DB8:10::/64 [110/2]
+     via FE80::5200:FF:FE04:0, GigabitEthernet0/2
+     via FE80::5200:FF:FE03:0, GigabitEthernet0/1
+O   2001:DB8:20::/64 [110/2]
+     via FE80::5200:FF:FE04:0, GigabitEthernet0/2
+     via FE80::5200:FF:FE03:0, GigabitEthernet0/1
+O   2001:DB8:30::/64 [110/2]
+     via FE80::5200:FF:FE04:0, GigabitEthernet0/2
+     via FE80::5200:FF:FE03:0, GigabitEthernet0/1
+O   2001:DB8:99::/64 [110/2]
+     via FE80::5200:FF:FE04:0, GigabitEthernet0/2
+     
+     
+     
+     
+R1#show ipv6 interface brief 
+GigabitEthernet0/0     [up/up]
+    unassigned
+GigabitEthernet0/1     [up/up]
+    FE80::5200:FF:FE02:1
+    2001:DB8:12::1
+GigabitEthernet0/2     [up/up]
+    FE80::5200:FF:FE02:2
+    2001:DB8:13::1
+GigabitEthernet0/3     [administratively down/down]
+    unassigned
+NVI0                   [up/up]
+    unassigned

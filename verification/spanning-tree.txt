@@ -1,0 +1,134 @@
+SW1#show spanning-tree root 
+
+                                        Root    Hello Max Fwd
+Vlan                   Root ID          Cost    Time  Age Dly  Root Port
+---------------- -------------------- --------- ----- --- ---  ------------
+VLAN0001         32769 5000.0005.0000         0    2   20  15                  
+VLAN0010         24586 5000.0005.0000         0    2   20  15                  
+VLAN0020         24596 5000.0005.0000         0    2   20  15                  
+VLAN0030         24606 5000.0006.0000         4    2   20  15  Po1             
+VLAN0099         24675 5000.0006.0000         4    2   20  15  Po1       
+
+SW1#show spanning-tree vlan 10
+
+VLAN0010
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    24586
+             Address     5000.0005.0000
+             This bridge is the root
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    24586  (priority 24576 sys-id-ext 10)
+             Address     5000.0005.0000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Gi0/0               Desg FWD 4         128.1    Shr 
+Gi1/0               Desg FWD 4         128.5    Shr Edge 
+Po1                 Desg FWD 4         128.65   Shr 
+
+
+
+
+SW1#show spanning-tree vlan 30
+
+VLAN0030
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    24606
+             Address     5000.0006.0000
+             Cost        4
+             Port        65 (Port-channel1)
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    28702  (priority 28672 sys-id-ext 30)
+             Address     5000.0005.0000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Gi0/0               Desg FWD 4         128.1    Shr 
+Po1                 Root FWD 4         128.65   Shr 
+
+
+
+
+SW2#show interfaces trunk 
+
+Port        Mode             Encapsulation  Status        Native vlan
+Gi0/1       on               802.1q         trunking      1
+Po1         on               802.1q         trunking      1
+
+Port        Vlans allowed on trunk
+Gi0/1       10,20,30,99
+Po1         10,20,30,99
+
+Port        Vlans allowed and active in management domain
+Gi0/1       10,20,30,99
+Po1         10,20,30,99
+
+Port        Vlans in spanning tree forwarding state and not pruned
+Gi0/1       10,20,30,99
+Po1         10,20,30,99
+SW2#
+SW2#show spn
+SW2#show sp 
+SW2#show spanning-tree ro
+SW2#show spanning-tree root 
+
+                                        Root    Hello Max Fwd
+Vlan                   Root ID          Cost    Time  Age Dly  Root Port
+---------------- -------------------- --------- ----- --- ---  ------------
+VLAN0001         32769 5000.0006.0000         0    2   20  15                  
+VLAN0010         24586 5000.0005.0000         4    2   20  15  Po1             
+VLAN0020         24596 5000.0005.0000         4    2   20  15  Po1             
+VLAN0030         24606 5000.0006.0000         0    2   20  15                  
+VLAN0099         24675 5000.0006.0000         0    2   20  15         
+
+
+
+SW2#show spanning-tree vlan 10
+
+VLAN0010
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    24586
+             Address     5000.0005.0000
+             Cost        4
+             Port        65 (Port-channel1)
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    28682  (priority 28672 sys-id-ext 10)
+             Address     5000.0006.0000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Gi0/1               Desg FWD 4         128.2    Shr 
+Gi1/0               Desg FWD 4         128.5    Shr Edge 
+Po1                 Root FWD 4         128.65   Shr 
+
+
+
+
+SW2#show spanning-tree vlan 30
+
+VLAN0030
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    24606
+             Address     5000.0006.0000
+             This bridge is the root
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    24606  (priority 24576 sys-id-ext 30)
+             Address     5000.0006.0000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Gi0/1               Desg FWD 4         128.2    Shr 
+Gi1/1               Desg FWD 4         128.6    Shr Edge 
+Po1                 Desg FWD 4         128.65   Shr 

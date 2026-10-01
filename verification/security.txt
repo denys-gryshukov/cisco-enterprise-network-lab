@@ -1,0 +1,68 @@
+R2#show access-lists USERS-IN
+Extended IP access list USERS-IN
+    10 deny ip 192.168.10.0 0.0.0.255 192.168.99.0 0.0.0.255 (5 matches)
+    20 permit ip 192.168.10.0 0.0.0.255 any (2644 matches)
+    
+    
+    
+ SW1#show port-security 
+Secure Port  MaxSecureAddr  CurrentAddr  SecurityViolation  Security Action
+                (Count)       (Count)          (Count)
+---------------------------------------------------------------------------
+      Gi1/0              1            1                  0         Restrict
+      Gi1/1              1            0                  0         Restrict
+---------------------------------------------------------------------------
+Total Addresses in System (excluding one mac per port)     : 0
+Max Addresses limit in System (excluding one mac per port) : 4096
+
+
+SW1#show port-security address 
+               Secure Mac Address Table
+-----------------------------------------------------------------------------
+Vlan    Mac Address       Type                          Ports   Remaining Age
+                                                                   (mins)    
+----    -----------       ----                          -----   -------------
+  10    0050.7966.6807    SecureSticky                  Gi1/0        -
+-----------------------------------------------------------------------------
+Total Addresses in System (excluding one mac per port)     : 0
+Max Addresses limit in System (excluding one mac per port) : 4096
+
+
+
+SW1#show ip dhcp snooping 
+Switch DHCP snooping is enabled
+Switch DHCP gleaning is disabled
+DHCP snooping is configured on following VLANs:
+10,20,30
+DHCP snooping is operational on following VLANs:
+10,20,30
+DHCP snooping is configured on the following L3 Interfaces:
+
+Insertion of option 82 is enabled
+   circuit-id default format: vlan-mod-port
+   remote-id: 5000.0005.0000 (MAC)
+Option 82 on untrusted port is not allowed
+Verification of hwaddr field is enabled
+Verification of giaddr field is enabled
+DHCP snooping trust/rate is configured on the following Interfaces:
+
+Interface                  Trusted    Allow option    Rate limit (pps)
+-----------------------    -------    ------------    ----------------   
+GigabitEthernet0/0         yes        yes             unlimited
+  Custom circuit-ids:
+GigabitEthernet0/2         yes        yes             unlimited
+  Custom circuit-ids:
+GigabitEthernet0/3         yes        yes             unlimited
+Interface                  Trusted    Allow option    Rate limit (pps)
+-----------------------    -------    ------------    ----------------   
+  Custom circuit-ids:
+GigabitEthernet1/0         no         no              15        
+  Custom circuit-ids:
+GigabitEthernet1/1         no         no              15        
+  Custom circuit-ids:
+Port-channel1              yes        yes             unlimited
+  Custom circuit-ids:
+  
+  
+  
+  

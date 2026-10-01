@@ -1,0 +1,35 @@
+R1#show ip nat translations 
+Pro Inside global      Inside local       Outside local      Outside global
+icmp 203.0.113.2:6283  192.168.10.21:6283 8.8.8.8:6283       8.8.8.8:6283
+icmp 203.0.113.2:6539  192.168.10.21:6539 8.8.8.8:6539       8.8.8.8:6539
+icmp 203.0.113.2:6795  192.168.10.21:6795 8.8.8.8:6795       8.8.8.8:6795
+icmp 203.0.113.2:7051  192.168.10.21:7051 8.8.8.8:7051       8.8.8.8:7051
+icmp 203.0.113.2:7307  192.168.10.21:7307 8.8.8.8:7307       8.8.8.8:7307
+icmp 203.0.113.2:7563  192.168.10.21:7563 8.8.8.8:7563       8.8.8.8:7563
+icmp 203.0.113.2:7819  192.168.10.21:7819 8.8.8.8:7819       8.8.8.8:7819
+icmp 203.0.113.2:8075  192.168.10.21:8075 8.8.8.8:8075       8.8.8.8:8075
+icmp 203.0.113.2:8331  192.168.10.21:8331 8.8.8.8:8331       8.8.8.8:8331
+icmp 203.0.113.2:8587  192.168.10.21:8587 8.8.8.8:8587       8.8.8.8:8587
+icmp 203.0.113.2:8843  192.168.10.21:8843 8.8.8.8:8843       8.8.8.8:8843
+
+
+
+
+R1#show ip nat statistics 
+Total active translations: 38 (0 static, 38 dynamic; 38 extended)
+Peak translations: 61, occurred 01:13:24 ago
+Outside interfaces:
+  GigabitEthernet0/0, GigabitEthernet0/2
+Inside interfaces: 
+  GigabitEthernet0/1
+Hits: 517  Misses: 0
+CEF Translated packets: 514, CEF Punted packets: 0
+Expired translations: 201
+Dynamic mappings:
+-- Inside Source
+[Id: 1] access-list 1 interface GigabitEthernet0/0 refcount 38
+
+Total doors: 0
+Appl doors: 0
+Normal doors: 0
+Queued Packets: 0
