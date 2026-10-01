@@ -160,6 +160,22 @@ show ip dhcp snooping binding
 
 
 
+## Verification and Failover Testing
+
+### HSRP Failover
+
+HSRP redundancy was tested by shutting down the LAN-facing interface on the preferred Active router.
+
+For VLANs 10 and 20, R2 is normally the Active router. After the R2 LAN interface was shut down, R3 transitioned to the Active state.
+
+Verification command:
+
+```text
+show standby brief
+
+
+
+
 ## Technologies
 
 - VLANs
