@@ -2,12 +2,16 @@
 
 Enterprise network lab built in EVE-NG using Cisco IOL routers and switches.
 
-The project demonstrates Layer 2 and Layer 3 redundancy, dynamic routing, IPv4/IPv6 dual-stack connectivity, network security, and troubleshooting.
+This personal EVE-NG lab models a small enterprise network with Layer 2 and first-hop redundancy, OSPF routing, IPv4/IPv6, NAT/PAT, and basic network security.
+
+The repository includes a topology diagram, an addressing plan, design notes, and captured Cisco IOS verification outputs. Device configurations, before/after failover captures, and troubleshooting records are not yet complete; see [Known gaps](#known-gaps-and-next-steps).
 
 
 ## Network Topology
 
 ![Cisco Enterprise Network Topology](topology/topology.png)
+
+The ISP and external Internet destination are simulated.
 
 
 ## VLAN Design
@@ -105,7 +109,9 @@ It provides:
 - NAT/PAT for internal IPv4 networks
 - OSPF default-route advertisement toward R2 and R3
 
-The ISP router uses a Loopback interface with address `8.8.8.8/32` to simulate an external Internet destination.
+The ISP router uses a loopback interface with address `8.8.8.8/32` to simulate an external destination.
+
+**NAT audit needed:** The saved [R1 NAT statistics](verification/nat.txt) show `GigabitEthernet0/2` as an **outside** interface, even though [the diagram](topology/topology.png) identifies it as R1's internal link to R3. This could be a configuration error or stale verification output. Without the running configuration, the actual cause cannot be confirmed. See [NAT interface audit](troubleshooting/nat-interface-audit.md).
 
 ### IPv6 Design
 
@@ -149,7 +155,7 @@ DHCP request rate limiting is configured on access ports to reduce the impact of
 
 ### Security Verification
 
-The following commands are used to verify the security configuration:
+The following commands can be used to verify the security configuration:
 
 ```text
 show access-lists
@@ -157,24 +163,35 @@ show port-security
 show port-security address
 show ip dhcp snooping
 show ip dhcp snooping binding
+```
 
+The saved [security evidence](verification/security.txt) includes ACL match counters, port-security state, and DHCP snooping status. A DHCP snooping binding-table capture is not currently included.
 
+## Verification and Evidence
 
-## Verification and Failover Testing
+Saved device CLI output is available for the following functions:
 
-### HSRP Failover
+| Function | File | Evidence |
+|---|---|---|
+| LACP and trunks | [etherchannel.txt](verification/etherchannel.txt) | Both switches report `Po1(SU)` with bundled LACP members and expected allowed VLANs |
+| Rapid-PVST+ | [spanning-tree.txt](verification/spanning-tree.txt) | SW1 root for VLANs 10/20 and SW2 root for VLANs 30/99 |
+| HSRP | [hsrp.txt](verification/hsrp.txt) | Normal Active/Standby roles; failover evidence has not been saved |
+| OSPFv2 | [ospf.txt](verification/ospf.txt) | R1 has FULL adjacencies with R2 and R3, and equal-cost routes to VLANs |
+| OSPFv3 and IPv6 | [ipv6.txt](verification/ipv6.txt) | IPv6 adjacencies and learned routes; end-host IPv6 tests are not saved |
+| DHCP | [dhcp.txt](verification/dhcp.txt) | Lease bindings on R2 and R3 |
+| NAT/PAT | [nat.txt](verification/nat.txt) | ICMP translations; **interface-role discrepancy remains unresolved** |
+| ACL, port security and DHCP snooping | [security.txt](verification/security.txt) | ACL matches, sticky secure MAC and DHCP snooping interface state |
 
-HSRP redundancy was tested by shutting down the LAN-facing interface on the preferred Active router.
+### HSRP Failover — Follow-up Verification Needed
 
-For VLANs 10 and 20, R2 is normally the Active router. After the R2 LAN interface was shut down, R3 transitioned to the Active state.
+The intended failover behavior is for R3 to become Active for VLANs 10/20 if R2's LAN-facing interface fails, and for R2 to resume its preferred role after recovery. The existing [HSRP output](verification/hsrp.txt) captures the normal state only; it does **not** prove that a failover test succeeded.
 
-Verification command:
+To verify this in EVE-NG:
 
-```text
-show standby brief
-
-
-
+1. Save `show standby brief` from R2 and R3, and start pings from a VLAN 10 host to its gateway and a reachable remote destination.
+2. In the lab only, shut down R2 `Gi0/1` and save R3's HSRP status and the host ping results.
+3. Restore R2's interface and document whether preemption and host connectivity recover as expected.
+4. Add before/during/after outputs to `verification/` and describe the actual result.
 
 ## Technologies
 
@@ -202,10 +219,16 @@ show standby brief
 - Cisco IOL L2
 - VPCS
 
+## Known Gaps and Next Steps
+
+- **Device configurations:** The `configs/` folder does not yet contain the running configurations of R1, R2, R3, ISP, SW1, or SW2. See [export guidance](configs/README.md).
+- **NAT:** Audit R1 interface roles using actual configuration and retest through both internal paths. See [NAT interface audit](troubleshooting/nat-interface-audit.md).
+- **HSRP:** Save before/during/after failover evidence and host connectivity tests.
+- **IPv6:** Save end-to-end host connectivity evidence (only OSPFv3 adjacencies/routes are currently recorded).
+- **Troubleshooting:** Document at least one real fault, diagnosis, corrective action and retest; do not invent incidents.
+
 ## Project Status
 
-Lab implementation completed.
-
-Documentation and verification outputs are being added.
+**Personal EVE-NG lab — documentation and verification in progress.** Existing CLI output supports several implemented features; the unresolved items above are not presented as fixed.
 
 
