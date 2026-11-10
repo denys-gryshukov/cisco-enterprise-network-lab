@@ -10,6 +10,11 @@ These notes document independent practice associated with Cisco networking, netw
 
 The primary [Cisco Enterprise Network Lab](../README.md) separately includes a topology diagram and actual CLI verification evidence for routing, switching, redundancy and security. Its documented unresolved NAT discrepancy and missing failover captures are not described as resolved.
 
+## Supplementary practice resources
+
+- [Netmiko read-only Python example](network-automation/README.md) — newly written example with a sample inventory; live-device execution not yet verified
+- [L1 network incident triage runbook](../runbooks/l1-network-incident-triage.md) — study template for intake, diagnostics, escalation and handover; not a production incident record
+
 ## Next evidence to add
 
 - Export sanitized, relevant configuration snippets and actual troubleshooting outputs
