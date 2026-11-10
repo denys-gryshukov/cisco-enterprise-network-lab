@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Read-only Cisco IOS interface audit for an isolated lab.
 
-New portfolio example. Syntax/dry-run checked; live device execution must be
-verified separately against the author's EVE-NG topology.
+New portfolio example. Live device execution must be validated separately
+against the author's EVE-NG topology.
 """
 import argparse
 import json
