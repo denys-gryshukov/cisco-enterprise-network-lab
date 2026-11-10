@@ -15,7 +15,7 @@ Alongside this Cisco topology, I have documented separate independent labs relev
 - [Python/Netmiko Cisco verification](projects/python-netmiko-network-verification.md) — SSH access, Cisco CLI checks and basic automation practice
 - [LibreNMS monitoring setup (in progress)](projects/librenms-monitoring-work-in-progress.md) — installation completed; device discovery, SNMP polling and alerts not yet validated
 
-See the [projects index](projects/README.md) for evidence status and outstanding tasks. These are independent learning projects, not professional production engagements.
+See the [projects index](projects/README.md) for evidence status and outstanding tasks. A [read-only Netmiko example](projects/network-automation/README.md) and [L1 incident triage runbook](runbooks/l1-network-incident-triage.md) are available as **learning materials**, not as proof of live device execution or production incidents. These are independent learning projects, not professional production engagements.
 
 ## Network Topology
 
