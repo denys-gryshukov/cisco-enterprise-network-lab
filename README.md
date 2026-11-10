@@ -7,6 +7,16 @@ This personal EVE-NG lab models a small enterprise network with Layer 2 and firs
 The repository includes a topology diagram, an addressing plan, design notes, and captured Cisco IOS verification outputs. Device configurations, before/after failover captures, and troubleshooting records are not yet complete; see [Known gaps](#known-gaps-and-next-steps).
 
 
+## Additional Hands-on Projects
+
+Alongside this Cisco topology, I have documented separate independent labs relevant to L1 network operations:
+
+- [FortiGate firewall and NAT troubleshooting](projects/fortigate-firewall-nat-troubleshooting.md) — FortiOS routing, policies, NAT and traffic-flow diagnostics
+- [Python/Netmiko Cisco verification](projects/python-netmiko-network-verification.md) — SSH access, Cisco CLI checks and basic automation practice
+- [LibreNMS monitoring setup (in progress)](projects/librenms-monitoring-work-in-progress.md) — installation completed; device discovery, SNMP polling and alerts not yet validated
+
+See the [projects index](projects/README.md) for evidence status and outstanding tasks. These are independent learning projects, not professional production engagements.
+
 ## Network Topology
 
 ![Cisco Enterprise Network Topology](topology/topology.png)
