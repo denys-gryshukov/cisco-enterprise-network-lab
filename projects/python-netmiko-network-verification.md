@@ -40,6 +40,10 @@ These are **private lab IP addresses**, not internet-facing customer endpoints.
 
 **Security note:** Do not globally enable deprecated SSH key-exchange methods or publish reusable passwords. Modern SSH settings should be preferred outside isolated emulation labs.
 
+## Related code example
+
+A [read-only Netmiko sample](network-automation/README.md) is now available. It is **new example code, not the original script run in October**, and has not yet been tested against the live EVE-NG devices. No captured device output is claimed for it.
+
 ## Evidence to publish next
 
 - Tested, sanitized Python script with a `requirements.txt` (without credentials)
