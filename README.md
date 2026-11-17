@@ -11,6 +11,8 @@ The repository includes a topology diagram, an addressing plan, design notes, an
 
 Alongside this Cisco topology, I have documented separate independent labs relevant to L1 network operations:
 
+- [Cisco + FortiGate troubleshooting (17 Nov 2026)](projects/2026-11-17-cisco-fortigate-troubleshooting/README.md) — 10 controlled fault investigations with recorded CLI, packet-capture findings and validation.
+
 - [FortiGate firewall and NAT troubleshooting](projects/fortigate-firewall-nat-troubleshooting.md) — FortiOS routing, policies, NAT and traffic-flow diagnostics
 - [Python/Netmiko Cisco verification](projects/python-netmiko-network-verification.md) — SSH access, Cisco CLI checks and basic automation practice
 - [LibreNMS monitoring setup (in progress)](projects/librenms-monitoring-work-in-progress.md) — installation completed; device discovery, SNMP polling and alerts not yet validated
