@@ -25,3 +25,7 @@ The primary [Cisco Enterprise Network Lab](../README.md) separately includes a t
 ## Information security
 
 Use only lab addresses and fictitious names. Do not publish passwords, SSH private keys, API tokens, SNMP communities, real customer information, or licensed device images.
+
+## 17 November 2026 — Verified Cisco + FortiGate Lab
+
+[10 controlled troubleshooting scenarios and L1 runbook](2026-11-17-cisco-fortigate-troubleshooting/README.md). This separate topology includes verified VLAN, trunk, routing, ACL, NAT, FortiGate Debug Flow and session inspection. Raw PCAPs and configuration backups remain pending.
