@@ -1,23 +1,24 @@
-# Cisco Enterprise Network Lab
+# Network Engineering Lab Portfolio
 
-Enterprise network lab built in EVE-NG using Cisco IOL routers and switches.
+Personal hands-on networking projects for entry-level Network Engineering and Network Operations roles. Built in EVE-NG with Cisco IOS/IOS XE, FortiGate, Ubuntu, Wireshark, LibreNMS and Python/Netmiko.
 
-This personal EVE-NG lab models a small enterprise network with Layer 2 and first-hop redundancy, OSPF routing, IPv4/IPv6, NAT/PAT, and basic network security.
+## Featured projects
 
-The repository includes a topology diagram, an addressing plan, design notes, and captured Cisco IOS verification outputs. Device configurations, before/after failover captures, and troubleshooting records are not yet complete; see [Known gaps](#known-gaps-and-next-steps).
+| Project | What I investigated or verified | Evidence |
+|---|---|---|
+| [Cisco + Fortinet Network Fault Investigation](projects/2026-11-17-cisco-fortigate-troubleshooting/README.md) | Ten controlled investigations covering VLANs, trunks, routing, ACLs, firewall policy, SNAT and session/traffic analysis. | Recorded observations, recovery tests and [rollback runbook](projects/2026-11-17-cisco-fortigate-troubleshooting/runbook.md). Raw PCAPs and full configs pending. |
+| Network Monitoring and Automation | [LibreNMS / Docker / SNMP](projects/librenms-monitoring-work-in-progress.md): device onboarding, interface-state event, alert exercise and recovery. [Python / Netmiko](projects/python-netmiko-network-verification.md): Cisco CLI collection and SSH interoperability. | Actual session observations, with original logs and later regression validation pending. |
+| [Cisco Enterprise Network](#network-topology) | OSPFv2/v3, IPv4/IPv6, HSRP, Rapid-PVST+, LACP, DHCP and access-layer security. | [Saved IOS verification outputs](#verification-and-evidence); HSRP failover, NAT audit and end-host IPv6 tests pending. |
 
+[Full project index and evidence standards](projects/README.md) · [L1 incident triage runbook](runbooks/l1-network-incident-triage.md)
 
-## Additional Hands-on Projects
+## About this portfolio
 
-Alongside this Cisco topology, I have documented separate independent labs relevant to L1 network operations:
+All projects are independent lab practice, not commercial networking or production customer experience. Archived device outputs, reconstructed observations and untested example material are explicitly distinguished. The three featured projects use separate lab topologies; their evidence is not interchangeable.
 
-- [Cisco + FortiGate troubleshooting (17 Nov 2026)](projects/2026-11-17-cisco-fortigate-troubleshooting/README.md) — 10 controlled fault investigations with recorded CLI, packet-capture findings and validation.
+## Cisco Enterprise Network — design and validation
 
-- [FortiGate firewall and NAT troubleshooting](projects/fortigate-firewall-nat-troubleshooting.md) — FortiOS routing, policies, NAT and traffic-flow diagnostics
-- [Python/Netmiko Cisco verification](projects/python-netmiko-network-verification.md) — SSH access, Cisco CLI checks and basic automation practice
-- [LibreNMS monitoring setup (in progress)](projects/librenms-monitoring-work-in-progress.md) — installation completed; device discovery, SNMP polling and alerts not yet validated
-
-See the [projects index](projects/README.md) for evidence status and outstanding tasks. A [read-only Netmiko example](projects/network-automation/README.md) and [L1 incident triage runbook](runbooks/l1-network-incident-triage.md) are available as **learning materials**, not as proof of live device execution or production incidents. These are independent learning projects, not professional production engagements.
+This EVE-NG lab models a small enterprise network with Layer 2 and first-hop redundancy, OSPF routing, IPv4/IPv6, NAT/PAT, and basic network security. The original topology, addressing plan and saved verification outputs are retained below. Full device configuration exports and several follow-up tests remain outstanding. See [Known gaps](#known-gaps-and-next-steps).
 
 ## Network Topology
 
@@ -237,7 +238,7 @@ To verify this in EVE-NG:
 - **NAT:** Audit R1 interface roles using actual configuration and retest through both internal paths. See [NAT interface audit](troubleshooting/nat-interface-audit.md).
 - **HSRP:** Save before/during/after failover evidence and host connectivity tests.
 - **IPv6:** Save end-to-end host connectivity evidence (only OSPFv3 adjacencies/routes are currently recorded).
-- **Troubleshooting:** Document at least one real fault, diagnosis, corrective action and retest; do not invent incidents.
+- **Troubleshooting:** The separate [Cisco + Fortinet fault investigation](projects/2026-11-17-cisco-fortigate-troubleshooting/README.md) documents ten controlled scenarios. The NAT discrepancy in this enterprise topology still requires its own diagnosis and retest.
 
 ## Project Status
 
