@@ -1,56 +1,59 @@
-# Cisco SSH Verification with Python & Netmiko
+# Network Automation — Cisco CLI Verification with Python / Netmiko
 
-**Platform:** Ubuntu Server, Python, Netmiko, Cisco IOL devices in EVE-NG  
-**Type:** Independent network automation practice (October–November 2026)  
-**Status:** Initial SSH and Netmiko CLI verification completed; the reusable script and execution transcript have not yet been uploaded.
+**Period:** October–November 2026 | **Environment:** Ubuntu, Python, Netmiko, Cisco EVE-NG lab | **Status:** Single-device CLI check executed; reusable multi-device automation and later SSH compatibility require validation.
 
 ## Objective
 
-Establish management connectivity from a Linux host to lab Cisco devices and use Python/Netmiko to collect operational CLI output.
+Establish management access to Cisco devices and collect operational state using a read-only Python workflow.
 
-## Lab layout
+## Management addressing
 
-Private laboratory subnet: `192.168.100.0/24`.
-
-| Role | Lab address |
+| Device | Private lab IP |
 |---|---|
-| Ubuntu automation host | `192.168.100.10` |
-| Cisco router R1 | `192.168.100.11` |
-| Cisco router R2 | `192.168.100.12` |
-| Cisco switch SW1 (management VLAN) | `192.168.100.13` |
+| Ubuntu automation host | 192.168.100.10 |
+| R1 | 192.168.100.11 |
+| R2 | 192.168.100.12 |
+| SW1 management | 192.168.100.13 |
 
-These are **private lab IP addresses**, not internet-facing customer endpoints.
+The automation topology is separate from the enterprise OSPF/HSRP lab and the 17 November FortiGate lab.
 
-## Work performed
+## Investigation 01 — SSH compatibility (23 October 2026)
 
-- Prepared an Ubuntu/Python environment and installed Netmiko.
-- Tested network reachability and SSH management access to Cisco IOL devices.
-- Investigated SSH interoperability issues involving legacy key-exchange algorithms on the lab images.
-- Used Netmiko to connect to a Cisco router and run `show ip interface brief` to inspect interface status.
-- Practiced basic Linux routing/connectivity checks; explored introductory Ansible concepts.
+**Symptom:** legacy IOS SSH algorithms were not accepted by the modern SSH client. The router offered SHA-1-based Diffie-Hellman KEX and ssh-rsa.
 
-## Example verification workflow (illustrative, not a claimed captured output)
+**Diagnostic action:** compared the peer's offered algorithms with the client policy. A narrowly scoped OpenSSH connection succeeded using explicit legacy KEX/host-key options for the isolated lab device. No global SSH security settings were weakened in the documented procedure.
 
-1. Confirm the Ubuntu host's address and route to the management network.
-2. Test IP reachability to each intended device.
-3. Verify SSH credentials and permitted algorithms in the **isolated lab**.
-4. Use Netmiko to run read-only commands such as `show ip interface brief`.
-5. Review interface admin/operational states, recording any down interfaces and their relevance.
-6. Store a sanitized command transcript with the device role, timestamp and explanation.
+**Corrective action:** changed the Python environment's Paramiko version from 5.1.0 (reported at the time) to 3.5.1. Netmiko subsequently connected to R1.
 
-**Security note:** Do not globally enable deprecated SSH key-exchange methods or publish reusable passwords. Modern SSH settings should be preferred outside isolated emulation labs.
+**Verification:** issued `show ip interface brief` through Netmiko. The recorded observation was:
 
-## Related code example
+| Interface | Address | Administrative / operational state |
+|---|---|---|
+| Gi0/0 | 192.168.100.11 | up/up |
+| Gi0/1–Gi0/3 | unassigned | administratively down/down |
 
-A [read-only Netmiko sample](network-automation/README.md) is now available. It is **new example code, not the original script run in October**, and has not yet been tested against the live EVE-NG devices. No captured device output is claimed for it.
+This table is a reconstruction of the observed output, not an original archived transcript. The successful session establishes a read-only single-device check, not a tested fleet-wide health-check tool.
 
-## Evidence to publish next
+## Investigation 02 — Compatibility regression (10 November 2026)
 
-- Tested, sanitized Python script with a `requirements.txt` (without credentials)
-- Example CLI output from a lab router
-- Error handling for unreachable devices and SSH authentication failures
-- A README section describing how to reproduce the test
+In the later Python environment, a Netmiko run against R1 failed with `NetmikoTimeoutException` caused by `Incompatible ssh peer (no acceptable kex algorithm)`. OpenSSH exposed the legacy KEX offers again. A successful follow-up in that later environment was not recovered from the lab records.
 
-## Skills demonstrated
+**Status:** October workaround succeeded; November regression remains open. Do not assume that downgrading a library is a permanent or production-safe fix. Prefer supported device firmware and current SSH algorithms; isolate any legacy lab exceptions.
 
-Python basics, Netmiko, Cisco IOS CLI verification, SSH troubleshooting, Linux networking, lab automation.
+## Reproducible next steps (not yet verified)
+
+- Check IP reachability and SSH negotiation before Python tests.
+- Use an isolated virtual environment and record Python, Netmiko and Paramiko versions.
+- Run read-only CLI collection against R1, then R2 and SW1 individually.
+- Record connection failures, exact commands and output; avoid embedding credentials.
+- Test exception handling and compare expected interface state with actual results.
+
+See [read-only sample code](network-automation/README.md). It was written as an educational example and is not the original executed script; live execution remains unverified. Ansible was explored at introductory level only.
+
+## Portfolio summary
+
+Used Python/Netmiko to collect Cisco interface status and investigated SSH key-exchange incompatibility, restoring a successful lab session in October. Subsequent compatibility failure and multi-device automation are explicitly outstanding.
+
+Related: [LibreNMS monitoring](librenms-monitoring-work-in-progress.md).
+
+Independent lab experience only; no commercial automation or production deployment claimed.
