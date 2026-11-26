@@ -30,6 +30,7 @@ The design uses OSPF area 0 on the routed links, passive interfaces on user VLAN
 | Check | What the device reported | Original output |
 | --- | --- | --- |
 | OSPFv2 and ECMP | R1 had FULL adjacencies with 2.2.2.2 and 3.3.3.3. All four IPv4 VLAN routes had cost 2 through both 10.0.12.2 and 10.0.13.2. | [R1 neighbors and routes](../../verification/ospf.txt) |
+| EIGRP for IPv4 (AS 100), separate IOL exercise | R1 learned 192.168.10.0/24 via R2 (10.0.12.2, Et0/1) and R3 (10.0.13.2, Et0/2). The topology table listed two successors. The routing table installed both next hops with metric 307200 and traffic share count 1 each. | [R1 neighbors, topology entry and routing table](../../verification/eigrp-vlan10.txt) |
 | OSPFv3 | Two FULL adjacencies. R1 listed two next hops for VLANs 10, 20 and 30. The captured VLAN 99 entry shows one. | [IPv6 routes and interfaces](../../verification/ipv6.txt) |
 | HSRP | Both routers agreed on active and standby roles in all four groups. The preferred active router had priority 110 and preemption enabled. | [R2 and R3 standby summaries](../../verification/hsrp.txt) |
 | Rapid-PVST+ | SW1 was root for VLANs 10/20 and SW2 for 30/99. Detailed VLAN 10 and 30 outputs show RSTP. | [Per-VLAN root and port roles](../../verification/spanning-tree.txt) |

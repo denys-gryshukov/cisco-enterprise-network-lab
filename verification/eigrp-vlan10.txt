@@ -1,0 +1,48 @@
+R1#show ip eigrp neighbors
+EIGRP-IPv4 Neighbors for AS(100)
+H   Address                 Interface              Hold Uptime   SRTT   RTO  Q  Seq
+                                                   (sec)         (ms)       Cnt Num
+1   10.0.13.2               Et0/2                    10 00:10:04    1   100  0  4
+0   10.0.12.2               Et0/1                    11 00:17:57    1   100  0  4
+R1#show ip eigrp topo
+R1#show ip eigrp topology 192.168.10.0 255.255.255.0
+EIGRP-IPv4 Topology Entry for AS(100)/ID(1.1.1.1) for 192.168.10.0/24
+  State is Passive, Query origin flag is 1, 2 Successor(s), FD is 307200
+  Descriptor Blocks:
+  10.0.12.2 (Ethernet0/1), from 10.0.12.2, Send flag is 0x0
+      Composite metric is (307200/281600), route is Internal
+      Vector metric:
+        Minimum bandwidth is 10000 Kbit
+        Total delay is 2000 microseconds
+        Reliability is 255/255
+        Load is 1/255
+        Minimum MTU is 1500
+        Hop count is 1
+        Originating router is 2.2.2.2
+  10.0.13.2 (Ethernet0/2), from 10.0.13.2, Send flag is 0x0
+      Composite metric is (307200/281600), route is Internal
+      Vector metric:
+        Minimum bandwidth is 10000 Kbit
+        Total delay is 2000 microseconds
+        Reliability is 255/255
+        Load is 1/255
+        Minimum MTU is 1500
+        Hop count is 1
+        Originating router is 3.3.3.3
+R1#show ip route 192.168.10.0
+Routing entry for 192.168.10.0/24
+  Known via "eigrp 100", distance 90, metric 307200, precedence routine (0), type internal
+  Redistributing via eigrp 100
+  Last update from 10.0.13.2 on Ethernet0/2, 00:10:20 ago
+  Routing Descriptor Blocks:
+    10.0.13.2, from 10.0.13.2, 00:10:20 ago, via Ethernet0/2
+      Route metric is 307200, traffic share count is 1
+      Total delay is 2000 microseconds, minimum bandwidth is 10000 Kbit
+      Reliability 255/255, minimum MTU 1500 bytes
+      Loading 1/255, Hops 1
+  * 10.0.12.2, from 10.0.12.2, 00:10:20 ago, via Ethernet0/1
+      Route metric is 307200, traffic share count is 1
+      Total delay is 2000 microseconds, minimum bandwidth is 10000 Kbit
+      Reliability 255/255, minimum MTU 1500 bytes
+      Loading 1/255, Hops 1
+R1#
