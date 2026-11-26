@@ -1,63 +1,27 @@
-# Network Monitoring — LibreNMS / Docker / SNMP
+# Monitoring Cisco devices with LibreNMS
 
-**Period:** November 2026 | **Environment:** Personal EVE-NG and Ubuntu lab | **Status:** Device onboarding and a controlled interface event/recovery exercised; raw monitoring evidence pending.
+I deployed LibreNMS on Ubuntu in Docker and used it to observe a controlled interface outage on SW2. The session notes record three separate signals: the interface event, the displayed recovery and a notification in a later test.
 
-## Objective
+## Device onboarding
 
-Practice the L1 monitoring workflow: onboard a network device, establish visibility, detect a change, investigate it and confirm recovery.
+LibreNMS ran with a dispatcher, MariaDB, Redis and a mail relay. From Ubuntu on the private management network, an SNMPv2c read-only query to R1 at 192.168.100.11 returned the expected sysName, `R1.automation.lab`. The application redirected HTTP requests to its login page.
 
-## Environment
+LibreNMS initially reported no SNMP reply during onboarding, and the service was reported unavailable during troubleshooting. In a subsequent session, R1 appeared in LibreNMS and SW2 was added. The records establish the final device state. The exact change that fixed onboarding is unknown.
 
-- Ubuntu monitoring/management host, private management subnet `192.168.100.0/24`.
-- LibreNMS deployed using Docker with application, dispatcher, MariaDB and Redis services (mail relay also present).
-- Cisco R1 management address: `192.168.100.11`; SW2 was subsequently added to LibreNMS. SW2's address is not asserted here.
-- SNMPv2c read-only monitoring in an isolated lab. Community values are deliberately omitted; prefer SNMPv3 for appropriate production deployments.
+## SW2 Gi0/1 event and recovery
 
-## Investigation 01 — SNMP and device onboarding
+| Stage | Observation | Interpretation |
+| --- | --- | --- |
+| Shut down Gi0/1 in the lab | LibreNMS recorded both ifAdminStatus and ifOperStatus changing from up to down. | Both values fit an administrative shutdown. |
+| Check notification | The event appeared. No initial notification was received. | The interface event alone establishes detection. |
+| Restore Gi0/1 | LibreNMS displayed Up about four minutes later. The configured polling interval was approximately five minutes. | Four minutes describes the observed display delay for this exercise. |
+| Repeat alert exercise | A notification was reported for a subsequent administrative-shutdown test. | Its rule, delivery transport and timestamp are unavailable. |
+| Check connectivity | SW2 ports showed Up and PC1/PC2 connectivity checks passed. A subsequent SW2 reachability check returned four of four replies. | Monitoring state and connectivity were both checked. |
 
-| Step | Observed result |
-|---|---|
-| Test SNMP from Ubuntu to R1 | `snmpget` returned the expected sysName.0 response; hostname recorded as R1.automation.lab. |
-| Check Docker and web application | Services started; HTTP redirected to login. |
-| Initial LibreNMS onboarding | R1 addition failed with an SNMP no-reply error; the service was also reported unavailable during troubleshooting. |
-| Subsequent session | R1 successfully added via SNMPv2c and visible in the application; SW2 also added. |
+## Evidence for a repeat run
 
-The initial failure's exact root cause and corrective change are not fully documented. Direct SNMP success and subsequent onboarding are separate observations, not proof that a particular change resolved the earlier failure.
+Record the interface state and time on Cisco, then capture the matching LibreNMS event. Save the rule expression and the delivered notification separately. After restoring the port, repeat the reachability test and capture the recovery time. This would allow a reader to compare device state, poll visibility and notification delivery for one test.
 
-## Investigation 02 — Controlled interface-down event
+The observations above were reconstructed from interactive lab notes. Original event exports, screenshots and notification records are pending.
 
-**Device:** Cisco SW2, Gi0/1. **Test:** intentionally administratively shut down a lab interface.
-
-| Phase | Observation |
-|---|---|
-| Inject fault | Administrative shutdown of SW2 Gi0/1. |
-| Detect | LibreNMS recorded ifOperStatus and ifAdminStatus transitions from up to down. |
-| First alert check | Event visible, but no alert initially received. |
-| Recovery | Interface restored; LibreNMS displayed Up again after approximately four minutes. |
-| Subsequent alert test | A notification/alert was reported received for an administrative-shutdown test. Polling interval was left at approximately five minutes. |
-| Final connectivity | SW2 ports reported Up; PC1/PC2 connectivity tests succeeded. A subsequent SW2 reachability check recorded 4/4 replies, 0% loss. |
-
-These are observations reconstructed from interactive lab records, not exported LibreNMS events or timestamped alert screenshots. The exact rule expression, notification transport and alert/recovery timestamps are not archived. An event is not the same as an alert; an administrative shutdown is not the same as an unplanned physical-link fault.
-
-## L1 operational workflow (repeatable checklist, not a new test result)
-
-1. Establish baseline device reachability, SNMP response and interface state.
-2. Record affected device/interface, expected impact and time.
-3. Correlate LibreNMS event state with Cisco `show interfaces status` / `show interfaces Gi0/1` and endpoint connectivity.
-4. Restore the interface only in the authorized lab; verify the same connectivity checks and monitoring state.
-5. Review rule conditions, polling latency and notification delivery separately; capture actual event and recovery evidence.
-
-## Evidence to archive
-
-- Sanitized SNMP sysName response, device status and polling/discovery output.
-- Before/during/after SW2 port-state screenshots, alert rule and actual alert record.
-- Notification transport and recovery timestamp, if validated.
-- Repeat test with an operational link-down condition (admin up), distinct from the administrative-shutdown test.
-
-## Portfolio summary
-
-Deployed LibreNMS in Docker, onboarded Cisco devices via SNMP and exercised controlled interface-state monitoring, alert detection and recovery. Direct SNMP and reported test observations support the practical exercise; original exported logs and screenshots remain pending.
-
-Related: [Python/Netmiko verification](python-netmiko-network-verification.md) · [L1 incident triage runbook](../runbooks/l1-network-incident-triage.md)
-
-This is independent lab practice, not commercial NOC experience or a claim of production SLA performance.
+[Automation session](python-netmiko-network-verification.md) · [L1 triage runbook](../runbooks/l1-network-incident-triage.md)

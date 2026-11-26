@@ -1,0 +1,31 @@
+R2#show ip route 10.0.13.1
+Routing entry for 10.0.13.0/30
+  Known via "eigrp 100", distance 90, metric 307200, precedence routine (0), type internal
+  Redistributing via eigrp 100
+  Last update from 10.0.23.2 on Ethernet0/1.999, 00:01:22 ago
+  Routing Descriptor Blocks:
+    10.0.23.2, from 10.0.23.2, 00:01:22 ago, via Ethernet0/1.999
+      Route metric is 307200, traffic share count is 1
+      Total delay is 2000 microseconds, minimum bandwidth is 10000 Kbit
+      Reliability 255/255, minimum MTU 1500 bytes
+      Loading 1/255, Hops 1
+  * 10.0.12.1, from 10.0.12.1, 00:01:22 ago, via Ethernet0/0
+      Route metric is 307200, traffic share count is 1
+      Total delay is 2000 microseconds, minimum bandwidth is 10000 Kbit
+      Reliability 255/255, minimum MTU 1500 bytes
+      Loading 1/255, Hops 1
+
+R1#show ip route 192.168.10.0
+Routing entry for 192.168.10.0/24
+  Known via "eigrp 100", distance 90, metric 307200, precedence routine (0), type internal
+  Redistributing via eigrp 100
+  Last update from 10.0.13.2 on Ethernet0/2, 00:00:23 ago
+  Routing Descriptor Blocks:
+  * 10.0.13.2, from 10.0.13.2, 00:00:23 ago, via Ethernet0/2
+      Route metric is 307200, traffic share count is 1
+      Total delay is 2000 microseconds, minimum bandwidth is 10000 Kbit
+      Reliability 255/255, minimum MTU 1500 bytes
+      Loading 1/255, Hops 1
+
+Test result reported during the lab session:
+R1 pinged 192.168.10.21 from source 10.0.13.1 while R1 Ethernet0/1 was shut down. The ping succeeded. The original ping command output was not retained.

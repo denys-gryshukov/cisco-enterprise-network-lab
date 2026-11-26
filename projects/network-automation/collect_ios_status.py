@@ -18,7 +18,10 @@ def load_devices(path):
     if not isinstance(data, list) or not data:
         raise ValueError("Inventory must be a non-empty JSON list.")
     for item in data:
-        if not isinstance(item, dict) or not item.get("name") or not item.get("host"):
+        if not isinstance(item, dict) or any(
+            not isinstance(item.get(key), str) or not item[key].strip()
+            for key in ("name", "host")
+        ):
             raise ValueError("Every inventory entry needs name and host.")
         if item.get("device_type", "cisco_ios") != "cisco_ios":
             raise ValueError("This example only supports cisco_ios.")
@@ -49,11 +52,9 @@ def main():
         return 2
 
     try:
+        from paramiko.ssh_exception import SSHException
         from netmiko import ConnectHandler
-        from netmiko.exceptions import (
-            NetmikoAuthenticationException,
-            NetmikoTimeoutException,
-        )
+        from netmiko.exceptions import ReadTimeout
     except ImportError:
         print("Install dependencies: python -m pip install -r requirements.txt",
               file=sys.stderr)
@@ -69,13 +70,15 @@ def main():
                 host=host,
                 username=username,
                 password=password,
+                ssh_strict=True,
+                system_host_keys=True,
                 conn_timeout=8,
                 auth_timeout=10,
             ) as conn:
                 for command in DEFAULT_COMMANDS:
                     print(f"\n$ {command}")
                     print(conn.send_command(command, read_timeout=20))
-        except (NetmikoAuthenticationException, NetmikoTimeoutException, OSError) as exc:
+        except (SSHException, ReadTimeout, OSError) as exc:
             failures += 1
             print(f"{name}: connection/collection failed: {type(exc).__name__}",
                   file=sys.stderr)
