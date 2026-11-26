@@ -1,34 +1,28 @@
-# Network Engineering Lab Portfolio
+# Project index and evidence
 
-Independent hands-on networking projects, aligned with entry-level Network Operations / NOC roles. These are personal learning environments, not commercial customer incidents.
+These independent labs support the projects section of my network engineering CV. Device names recur across labs. Each link points to the environment where the observation was made.
 
-## Featured projects
+| Project and skill | What I can demonstrate | Source |
+| --- | --- | --- |
+| Cisco + FortiGate troubleshooting | Investigated ten controlled scenarios across switching, routing, access control, NAT and application reachability. Recorded the test and outcome for each. | [Case records](2026-11-17-cisco-fortigate-troubleshooting/cases.md) and [transcribed CLI excerpts](2026-11-17-cisco-fortigate-troubleshooting/README.md#session-excerpts) |
+| LibreNMS monitoring | Deployed LibreNMS in Docker, added Cisco devices via SNMP and observed an administrative interface shutdown and recovery. | [Monitoring session notes](librenms-monitoring-work-in-progress.md) |
+| Python automation | Collected R1 interface status with Netmiko and investigated an SSH key-exchange mismatch. An October session succeeded. The November failure is open. | [SSH session records](python-netmiko-network-verification.md) and [read-only example](network-automation/README.md) |
+| Cisco routing and switching | Verified OSPF neighbors and IPv4 ECMP, HSRP roles, spanning-tree roots and LACP member state. Inspected DHCP leases, ACL counters and switch security state. | [Campus evidence register](cisco-enterprise/README.md#verification-and-evidence) |
 
-| Project | Practical result | Evidence |
-|---|---|---|
-| [Cisco + Fortinet Network Fault Investigation](2026-11-17-cisco-fortigate-troubleshooting/README.md) | Ten controlled investigations: VLANs, trunks, routing, ACLs, policies, SNAT, session inspection and DNS/service reachability. | Interactive CLI and Wireshark observations transcribed; raw PCAPs/configuration exports pending. |
-| Network Monitoring and Automation — [LibreNMS](librenms-monitoring-work-in-progress.md) / [Python + Netmiko](python-netmiko-network-verification.md) | SNMP device onboarding, controlled interface event/alert and recovery; single-router CLI collection and SSH interoperability diagnosis. | Observations from prior sessions; original alerts, device outputs and script pending. October SSH success does not establish resolution of November regression. |
-| [Cisco Enterprise Network](../README.md#network-topology) | OSPFv2 FULL adjacencies and ECMP, OSPFv3 learned routes, HSRP roles, Rapid-PVST+, LACP, DHCP and security state. | Original [Cisco verification outputs](../verification/ospf.txt) linked from the main README. Failover, IPv6 endpoint tests and NAT audit outstanding. |
+## Evidence readers can review
 
-## Supporting practice
+- **Device output.** Original Cisco CLI captures are in [verification](../verification). Route code `O` identifies OSPF in the ECMP example. Prior EIGRP practice has no archived output here.
+- **Session record.** The dated reports reconstruct observations from interactive exercises. The original PCAPs, notification records and Python SSH transcripts have yet to be archived.
+- **Reusable practice material.** The [triage template](../runbooks/l1-network-incident-triage.md), [firewall rollback reference](2026-11-17-cisco-fortigate-troubleshooting/runbook.md) and [collector](network-automation/README.md) can guide another run. The collector page lists its local validation separately.
 
-- [FortiGate 7.4 firewall and NAT troubleshooting](fortigate-firewall-nat-troubleshooting.md): earlier October exercise; separate from the FortiOS 7.6.2 investigation.
-- [Read-only Netmiko example](network-automation/README.md): illustrative code, not a tested live-device script.
-- [L1 network incident triage runbook](../runbooks/l1-network-incident-triage.md): learning template, not a production incident record.
-- [Cisco/FortiGate lab rollback runbook](2026-11-17-cisco-fortigate-troubleshooting/runbook.md): controlled lab baseline.
+The [October FortiOS 7.4 exercise](fortigate-firewall-nat-troubleshooting.md) used policy 20. The [November FortiOS 7.6.2 exercise](2026-11-17-cisco-fortigate-troubleshooting/README.md) used policy 1.
 
-## Protocol scope
+## Open verification items
 
-OSPF equal-cost routes in the enterprise topology were learned via **OSPF**, not EIGRP. Earlier learning history includes EIGRP AS 100 and variance practice in October 2025, but no original EIGRP CLI output or configuration has been recovered for this portfolio; it is separate from the documented OSPF evidence. BGP and VPN theory are not presented as verified practical projects.
-
-## Evidence standards
-
-- **Archived CLI:** original saved device outputs; strongest evidence in this repository.
-- **Observed / transcribed:** actual session observations reconstructed from earlier lab records, with limitations stated.
-- **Example / planned:** learning material or future checks; not evidence of execution.
-
-Keep lab topologies separate. Never publish credentials, SNMP communities, SSH private keys, cloud public management addresses, licensed images or customer information. Outstanding tests are not described as completed.
-
-## Next steps
-
-Export sanitized Cisco and FortiGate configurations, archive paired packet captures, capture LibreNMS polling and alert/recovery evidence, validate the current Netmiko environment, and close the enterprise NAT and HSRP verification gaps with before/after tests.
+| Area | Evidence needed to close it |
+| --- | --- |
+| Campus NAT | Verify R1 Gi0/2 against the live configuration and test traffic through each internal path. [Audit](../troubleshooting/nat-interface-audit.md) |
+| Campus redundancy and IPv6 | Capture HSRP roles and host reachability before, during and after failover. Capture IPv6 host-to-host tests. [Test scope](cisco-enterprise/README.md#follow-up-tests) |
+| Firewall | Archive paired packet captures and sanitized configuration for a repeat of a documented case. |
+| Monitoring | Capture a timestamped event, alert rule, delivered notification and recovery for the same test. |
+| Automation | Record the current SSH environment and a live collector run per device. |
