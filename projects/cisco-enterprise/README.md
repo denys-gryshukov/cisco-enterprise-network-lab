@@ -31,6 +31,7 @@ The design uses OSPF area 0 on the routed links, passive interfaces on user VLAN
 | --- | --- | --- |
 | OSPFv2 and ECMP | R1 had FULL adjacencies with 2.2.2.2 and 3.3.3.3. All four IPv4 VLAN routes had cost 2 through both 10.0.12.2 and 10.0.13.2. | [R1 neighbors and routes](../../verification/ospf.txt) |
 | EIGRP for IPv4 (AS 100), separate IOL exercise | R1 learned 192.168.10.0/24 via R2 (10.0.12.2, Et0/1) and R3 (10.0.13.2, Et0/2). The topology table listed two successors. The routing table installed both next hops with metric 307200 and traffic share count 1 each. | [R1 neighbors, topology entry and routing table](../../verification/eigrp-vlan10.txt) |
+| EIGRP transit and failover, separate IOL exercise | R2 and R3 formed an EIGRP AS 100 adjacency across dedicated VLAN 999 on the inter-switch trunk. R2 installed equal-cost paths to R1’s 10.0.13.0/30 subnet, through R1 on Ethernet0/0 and R3 at 10.0.23.2 on Ethernet0/1.999. With R1 Ethernet0/1 down, R1 retained the VLAN 10 route through R3, and a sourced ping to PC1 (192.168.10.21) succeeded. | [R2 backup route and R1 failover route](../../verification/eigrp-transit-failover.txt) |
 | OSPFv3 | Two FULL adjacencies. R1 listed two next hops for VLANs 10, 20 and 30. The captured VLAN 99 entry shows one. | [IPv6 routes and interfaces](../../verification/ipv6.txt) |
 | HSRP | Both routers agreed on active and standby roles in all four groups. The preferred active router had priority 110 and preemption enabled. | [R2 and R3 standby summaries](../../verification/hsrp.txt) |
 | Rapid-PVST+ | SW1 was root for VLANs 10/20 and SW2 for 30/99. Detailed VLAN 10 and 30 outputs show RSTP. | [Per-VLAN root and port roles](../../verification/spanning-tree.txt) |
@@ -42,6 +43,12 @@ The design uses OSPF area 0 on the routed links, passive interfaces on user VLAN
 ### Access-layer design
 
 The design applies USERS-IN inbound on the VLAN 10 subinterfaces of R2 and R3. The archive includes counters from R2. SW1’s access ports Gi1/0 and Gi1/1 use restrict mode with a one-address limit. DHCP snooping output lists those ports as untrusted with a 15-packet-per-second limit, and Po1 and the uplinks as trusted. Full running configurations for both routers and switches are pending.
+
+## EIGRP transit and failover exercise
+
+This was a separate IOL exercise from the OSPF campus evidence above. VLAN 999 was added to the router-facing trunks and the inter-switch Port-channel. R2 Ethernet0/1.999 uses 10.0.23.1/30; R3 Ethernet0/2.999 uses 10.0.23.2/30. Both subinterfaces participate in EIGRP AS 100 and are non-passive. R2 and R3 formed an adjacency.
+
+With R1 Ethernet0/1 shut down, R1 kept its EIGRP route to 192.168.10.0/24 through R3. R2 used its EIGRP route through R3 to return traffic destined to R1 10.0.13.1. The operator reported a successful five-echo ping to PC1 during this test. The CLI transcript preserves the route output. The raw ping result was not retained.
 
 ## Follow-up tests
 
