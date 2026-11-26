@@ -42,6 +42,10 @@ The previously documented multi-router OSPF/HSRP topology in this repository is 
 - R1 preventive discard route added in scenario 07: `192.168.0.0/16 -> Null0` (administrative distance 250). More-specific connected /24 routes take precedence by longest-prefix match.
 - R1 inbound extended ACL `USERS_TO_SERVERS` on `Ethernet0/1.10` permits PC1 TCP/22 to SRV1, denies ICMP from PC1 to SRV1, then permits other IP traffic. **The ACL remained configured at the end of the recorded session.**
 
+## Investigation method
+
+For each controlled fault, establish the expected path, introduce one change, observe the symptom, isolate the affected layer or policy, correct or intentionally retain the change, then repeat the relevant checks. The evidence type differs by scenario: CLI, packet observation, session counters or connectivity results. Not every scenario used every tool.
+
 ## Verified troubleshooting cases
 
 | ID | Fault injected / topic | Primary evidence | Recovery |
@@ -55,7 +59,7 @@ The previously documented multi-router OSPF/HSRP topology in this repository is 
 | 07 | Prevent routing loop when connected VLAN disappears | Added Null0 /16; after VLAN 20 shutdown, error changed from `Time to live exceeded` to `Destination Host Unreachable` from R1 | Restored VLAN 20; SRV1 4/4 and internet 4/4 |
 | 08 | Selectively filter ICMP but permit SSH | Cisco ACL counters: 5 TCP/22 permit, 4 ICMP deny, 4 general IP permit; Netcat TCP/22 succeeded | Intentional filtering retained |
 | 09 | Session tracking + temporary DNS resolver fault | FortiGate ICMP/TCP session entries `policy_id=1`, SNAT/return DNAT; resolver lacked upstream servers; `HTTP/2 200` after temporary DNS assignment | DNS working during test; **persistence not configured** |
-| 10 | Restrict FortiGate policy service `ALL` → `PING` | ICMP 4/4; DNS TCP/53 SYN denied by implicit policy 0; TCP/443 timeout without DNS | Reverted service to `ALL`; ping 4/4, Netcat TCP/443 succeeded, HTTPS HTTP/2 200 |
+| 10 | Restrict FortiGate policy service `ALL` → `PING` | ICMP 4/4; DNS TCP/53 SYN denied by implicit policy 0; direct IP TCP/443 test timed out | Reverted service to `ALL`; ping 4/4, Netcat TCP/443 succeeded, HTTPS HTTP/2 200 |
 
 ### Representative observations (transcribed, not original raw evidence files)
 
@@ -87,7 +91,7 @@ statistic ... org=1429/12/1 reply=6005/12/1
 1. **The interface can stay up while connectivity fails.** Access-VLAN assignment and trunk allowed VLANs must be checked separately.
 2. **Packets can be routable and still be denied by policy.** FortiGate Debug Flow separates route lookup from policy enforcement.
 3. **Missing SNAT can cause failed return connectivity.** The observed pre-/post-NAT captures verified translation when enabled and untranslated egress when disabled. The precise upstream drop location was not independently proven.
-4. **Routes interact.** R1's default route and FortiGate's broad /16 return route created symptoms consistent with a forwarding loop after a connected /24 disappeared. A more-specific discard route prevented the observed TTL-exceeded behavior in this lab.
+4. **Routes interact.** R1's default route and FortiGate's broad /16 return route created symptoms consistent with a forwarding loop after a connected /24 disappeared. A /16 discard route, more specific than the default route but less specific than connected /24s, prevented the observed TTL-exceeded behavior in this lab.
 5. **An application failure is not always an HTTPS failure.** DNS TCP/53 was explicitly denied after allowing only the PING service; a separate IP-based TCP/443 test timed out.
 6. **Stateful inspection is observable.** FortiGate recorded bidirectional sessions and reverse NAT mapping for ICMP and HTTPS.
 
@@ -108,4 +112,4 @@ statistic ... org=1429/12/1 reply=6005/12/1
 - Validate TCP SYN/SYN-ACK/ACK and RST-vs-timeout with Wireshark in a new controlled exercise.
 - Add a rollback checklist, timestamped verification table, and monitoring/automation integration.
 
-**Portfolio-ready, accurately scoped description:** Diagnosed and resolved controlled routing, VLAN, trunk, NAT and firewall-policy faults using Cisco IOS XE, FortiOS Debug Flow, Wireshark, ping, tracepath, Netcat and ACL/session counters. Verified repairs through repeatable connectivity tests.
+**Portfolio-ready, accurately scoped description:** Investigated ten controlled fault and verification scenarios involving routing, VLANs, trunks, ACLs, firewall policies and SNAT using Cisco IOS XE, FortiOS Debug Flow and Wireshark. Validated changes with scenario-specific CLI counters, packet observations, session/NAT entries and connectivity retests. Intentional ACL filtering was retained; the DNS repair was temporary.
